@@ -1,0 +1,8 @@
+{
+    "language": "zh_CN",
+    "local_embedding": true,
+    "default_model": "Qwen1.5-4B-Chat",
+    "share": true,
+    "server_name": "0.0.0.0",
+    "server_port": 3389
+}
