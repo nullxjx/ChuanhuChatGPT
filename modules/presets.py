@@ -91,18 +91,9 @@ ONLINE_MODELS = [
 ]
 
 LOCAL_MODELS = [
-    "chatglm-6b",
-    "chatglm-6b-int4",
-    "chatglm-6b-int4-ge",
-    "chatglm2-6b",
-    "chatglm2-6b-int4",
-    "chatglm3-6b",
     "chatglm3-6b-32k",
-    "StableLM",
-    "MOSS",
-    "Llama-2-7B-Chat",
-    "Qwen 7B",
-    "Qwen 14B"
+    "Qwen1.5-4B-Chat",
+    "Yi-6B-Chat",
 ]
 
 # Additional metadata for online and local models
@@ -115,11 +106,17 @@ MODEL_METADATA = {
         "repo_id": "TheBloke/Llama-2-7b-Chat-GGUF",
         "filelist": ["llama-2-7b-chat.Q6_K.gguf"],
     },
-    "Qwen 7B": {
-        "repo_id": "Qwen/Qwen-7B-Chat-Int4",
+    "Qwen1.5-4B-Chat": {
+        "repo_id": "Qwen/Qwen1.5-4B-Chat",
+        "vllm_endpoints": "http://localhost:8000"
     },
-    "Qwen 14B": {
-        "repo_id": "Qwen/Qwen-14B-Chat-Int4",
+    "chatglm3-6b-32k": {
+        "repo_id": "THUDM/chatglm3-6b-32k",
+        "vllm_endpoints": "http://localhost:8000"
+    },
+    "Yi-6B-Chat": {
+        "repo_id": "01-ai/Yi-6B-Chat",
+        "vllm_endpoints": "http://localhost:8000"
     },
     "GPT3.5 Turbo": {
         "model_name": "gpt-3.5-turbo",

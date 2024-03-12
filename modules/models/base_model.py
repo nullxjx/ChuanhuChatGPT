@@ -148,6 +148,7 @@ class ModelType(Enum):
     GoogleGemini = 19
     GoogleGemma = 20
     Ollama = 21
+    VLLM = 22
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -160,8 +161,6 @@ class ModelType(Enum):
                 model_type = ModelType.OpenAIVision
             else:
                 model_type = ModelType.OpenAI
-        elif "chatglm" in model_name_lower:
-            model_type = ModelType.ChatGLM
         elif "ollama" in model_name_lower:
             model_type = ModelType.Ollama
         elif "llama" in model_name_lower or "alpaca" in model_name_lower:
@@ -190,8 +189,6 @@ class ModelType(Enum):
             model_type = ModelType.Spark
         elif "claude" in model_name_lower:
             model_type = ModelType.Claude
-        elif "qwen" in model_name_lower:
-            model_type = ModelType.Qwen
         elif "ernie" in model_name_lower:
             model_type = ModelType.ERNIE
         elif "dall" in model_name_lower:
@@ -199,7 +196,8 @@ class ModelType(Enum):
         elif "gemma" in model_name_lower:
             model_type = ModelType.GoogleGemma
         else:
-            model_type = ModelType.LLaMA
+            # 默认选择vLLM部署的模型
+            model_type = ModelType.VLLM
         return model_type
 
 

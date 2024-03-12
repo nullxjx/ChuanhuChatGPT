@@ -12,7 +12,7 @@ from ..index_func import *
 from ..presets import *
 from ..utils import *
 from .base_model import BaseLLMModel, ModelType
-
+from ..presets import MODEL_METADATA
 
 def get_model(
     model_name,
@@ -149,6 +149,12 @@ def get_model(
             from .GoogleGemma import GoogleGemmaClient
             model = GoogleGemmaClient(
                 model_name, access_key, user_name=user_name)
+        elif model_type == ModelType.VLLM:
+            from .vLLM import VllmClient
+            vllm_endpoints = MODEL_METADATA[model_name]["vllm_endpoints"]
+            model = VllmClient(
+                model_name, user_name=user_name, vllm_endpoints=vllm_endpoints
+            )
         elif model_type == ModelType.Unknown:
             raise ValueError(f"Unknown model: {model_name}")
         else:

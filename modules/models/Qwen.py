@@ -3,6 +3,9 @@ import os
 from transformers.generation import GenerationConfig
 import logging
 import colorama
+import torch
+from threading import Thread
+from transformers import TextIteratorStreamer, GenerationConfig
 from .base_model import BaseLLMModel
 from ..presets import MODEL_METADATA
 
@@ -21,7 +24,8 @@ class Qwen_Client(BaseLLMModel):
             except KeyError:
                 model_source = model_name
         self.tokenizer = AutoTokenizer.from_pretrained(model_source, trust_remote_code=True, resume_download=True)
-        self.model = AutoModelForCausalLM.from_pretrained(model_source, device_map="cuda", trust_remote_code=True, resume_download=True).eval()
+        self.model = AutoModelForCausalLM.from_pretrained(model_source, device_map="auto", trust_remote_code=True,
+                                                          resume_download=True, torch_dtype=torch.float16).eval()
 
     def generation_config(self):
         return GenerationConfig.from_dict({
@@ -58,11 +62,22 @@ class Qwen_Client(BaseLLMModel):
         return response, len(response)
 
     def get_answer_stream_iter(self):
-        history, query = self._get_glm_style_input()
-        self.model.generation_config = self.generation_config()
-        for response in self.model.chat_stream(
-                self.tokenizer,
-                query,
-                history,
-            ):
-                yield response
+        self.model.generation_config = generation_config = self.generation_config()
+        text = self.tokenizer.apply_chat_template(
+            self.history,
+            tokenize=False,
+            add_generation_prompt=True
+        )
+        model_inputs = self.tokenizer([text], return_tensors="pt").to(self.model.device)
+
+        streamer = TextIteratorStreamer(self.tokenizer, skip_prompt=True, skip_special_tokens=True)
+        generation_kwargs = dict(model_inputs, streamer=streamer)
+        generation_kwargs.update(generation_config.__dict__)
+
+        thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
+        thread.start()
+
+        generated_text = ""
+        for new_text in streamer:
+            generated_text += new_text
+            yield generated_text
