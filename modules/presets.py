@@ -108,15 +108,15 @@ MODEL_METADATA = {
     },
     "Qwen1.5-4B-Chat": {
         "repo_id": "Qwen/Qwen1.5-4B-Chat",
-        "vllm_endpoints": "http://localhost:8000"
+        "vllm_endpoints": "http://localhost:6399"
     },
     "chatglm3-6b-32k": {
         "repo_id": "THUDM/chatglm3-6b-32k",
-        "vllm_endpoints": "http://localhost:8000"
+        "vllm_endpoints": "http://localhost:6399"
     },
     "Yi-6B-Chat": {
         "repo_id": "01-ai/Yi-6B-Chat",
-        "vllm_endpoints": "http://localhost:8000"
+        "vllm_endpoints": "http://localhost:6399"
     },
     "GPT3.5 Turbo": {
         "model_name": "gpt-3.5-turbo",
